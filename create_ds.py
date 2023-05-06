@@ -1,7 +1,7 @@
 from game import GAMEOVER,TIE, Rand_TicTacToe
 import os
 
-ds_path = 'ttt_ds.csv'
+ds_path = 'samp_ds.csv'
 if os.path.getsize(ds_path) > 13:
     if input("\nWHOA! It seems you've already created the data_set!\nContinuing will double it's size!\n\nDo you wish to continue <y/n>: ").upper().startswith('N'):
         exit()
@@ -12,7 +12,7 @@ t=0
 max_streak=0
 streak = 0
 with open(ds_path,mode='a') as f:
-    for _ in range(420000):
+    for _ in range(420):
         try:
             game = Rand_TicTacToe()
             game.play('X')
