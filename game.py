@@ -51,7 +51,7 @@ class TicTacToe (object):
         self.play('X')
 
     def get_ai_move(self):
-        ai=HorseAI(self.gamedict)
+        ai=HorseAI(self.gamedict,'O')
         return ai.move
     
     def detect_win(self):
@@ -87,23 +87,23 @@ class Rand_TicTacToe(TicTacToe):
         
 
     def x_move(self):
-       move = self.get_x_move()
-       self.make_move('X',move)
-       self.log.append(move) 
-       self.play('O')
+        move = self.get_x_move()
+        if 'X' in self.gamedict.values() and 'O' in self.gamedict.values():
+            self.register_log(move)
+        self.make_move('X',move) 
+        self.play('O')
 
     def get_x_move(self):
         ai2 = DummAI(self.gamedict)
         return ai2.move
     
     def get_ai_move(self):
-        ai = HorseAI(self.gamedict)
+        ai = HorseAI(self.gamedict,'O')
         return ai.move
     
     def ai_move(self):
         move = self.get_ai_move()
         self.make_move('O',move)
-        self.log.append(move)
         self.play('X')
 
     # def start(self):
@@ -111,9 +111,25 @@ class Rand_TicTacToe(TicTacToe):
     #     if cointoss:
     #         self.play('X')
     #     self.play('O')
+    def register_log(self,move):
+        tuple_state = []
+        for mark in self.gamedict.values():
+            if mark == 'X':
+                space = (1,0)
+            elif mark == 'O':
+                space = (0,1)
+            else:
+                space = (0,0)
+            tuple_state.append(space)
+        move_reg = [tuple_state,[[0,0,0,0,0,0,0,0,0],0]]
+        move_reg[1][0][move-1]=1
+        self.log.append(move_reg)
+        
         
     def play(self,whoseturn):
         #print(self)
+        if ' ' not in self.gamedict.values():
+            raise TIE()
         
         if self.detect_win():
             if whoseturn == 'X':
@@ -121,10 +137,6 @@ class Rand_TicTacToe(TicTacToe):
             else:
                 self.result = 'win'
             raise GAMEOVER
-        
-        if ' ' not in self.gamedict.values():
-            self.result = 'tie'
-            raise TIE()
         
         if whoseturn == 'X':
             self.x_move()

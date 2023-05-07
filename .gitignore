@@ -2,3 +2,5 @@
 *.pyc
 *samp*
 *ML*
+*pycache*
+*ttt*
