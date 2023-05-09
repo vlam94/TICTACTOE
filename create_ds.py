@@ -6,7 +6,6 @@ ds_path = 'ttt_ds.pkl'
 if os.path.getsize(ds_path) > 13:
     print ("\nWHOA! It seems you've already created the data_set!\nContinuing will overwrite it\n\n ABORTING!\n")
     exit()
-
 x=0
 o=0
 t=0
@@ -17,26 +16,34 @@ streak = 0
 num_wins = 33000
 logs=[]
 while x < num_wins:
-    if x // 1000 == 0:
+    if x % 1000 == 0:
         print('still processing...')  
     try:
         game = Rand_TicTacToe()
         game.play('X')
     except GAMEOVER:
         if game.result == 'win':
-            for play in game.log:
-                play[1][1] = 1
-                logs.append(play) 
+            for i in range(len(game.log)):
+                if i % 2 == 0:
+                    #saves moves to the winning random player
+                    #print(f"X WIN {game.log[i]}")
+                    logs.append(game.log[i]) 
             streak = 0
             x += 1
             #print('\n\n\n X WINS ! \n\n\n')
             #print(game)
             #sleep(15)
-        else:
+        else: 
             streak += 1
             o += 1
-            for play in game.log:
-                logs.append(play)
+        if o % 15 == 0 and game.result=='lose':
+            for i in range(len(game.log)):
+                if i % 2 == 1:
+                    #saves moves to the winning strategic player
+                    #print(f"O WIN {game.log[i]}")
+                    logs.append(game.log[i])
+           
+            
         if streak > max_streak:
             max_streak = streak
         #with open(ds_path, 'a') as f:
@@ -45,6 +52,12 @@ while x < num_wins:
         
     except TIE:
         t += 1
+        if t % 5 == 0:
+            for i in range(len(game.log)):
+                if i % 2 == 1:
+                    #saves strategic moves of the TIE
+                    #print(f"TIE {game.log[i]}")
+                    logs.append(game.log[i])
     
 
     #for play in logs:

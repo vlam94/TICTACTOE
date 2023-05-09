@@ -89,7 +89,7 @@ class Rand_TicTacToe(TicTacToe):
     def x_move(self):
         move = self.get_x_move()
         if 'X' in self.gamedict.values() and 'O' in self.gamedict.values():
-            self.register_log(move)
+            self.register_log(move,'X')
         self.make_move('X',move) 
         self.play('O')
 
@@ -103,6 +103,8 @@ class Rand_TicTacToe(TicTacToe):
     
     def ai_move(self):
         move = self.get_ai_move()
+        if 'X' in self.gamedict.values() and 'O' in self.gamedict.values():
+            self.register_log(move,'O')
         self.make_move('O',move)
         self.play('X')
 
@@ -111,19 +113,19 @@ class Rand_TicTacToe(TicTacToe):
     #     if cointoss:
     #         self.play('X')
     #     self.play('O')
-    def register_log(self,move):
+    def register_log(self,move,turn):
         tuple_state = []
         for mark in self.gamedict.values():
-            if mark == 'X':
+            if mark == turn:
                 space = (1,0)
-            elif mark == 'O':
+            elif mark != ' ':
                 space = (0,1)
             else:
                 space = (0,0)
             tuple_state.append(space)
-        move_reg = [tuple_state,[[0,0,0,0,0,0,0,0,0],0]]
-        move_reg[1][0][move-1]=1
-        self.log.append(move_reg)
+        move_reg = [0,0,0,0,0,0,0,0,0]
+        move_reg[move-1]=1
+        self.log.append((tuple(tuple_state),tuple(move_reg)))
         
         
     def play(self,whoseturn):
