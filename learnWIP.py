@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Dense
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 ds_path = 'ttt_ds.pkl'
 with open (ds_path, mode='br') as f:
@@ -22,10 +24,31 @@ for log in ds:
 
 xdata = np.array(xdata)
 ydata = np.array(ydata)
-vs = .2
-x_train, x_val, y_train, y_val = train_test_split(xdata, ydata,train_size=(1-vs), test_size=vs, random_state=42)
+vsize = .2
+x_train, x_val, y_train, y_val = train_test_split(xdata, ydata,train_size=(1-vsize), test_size=vsize, random_state=42)
+history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=9)
+
+# Plot the training and validation loss curves
+sns.set_style('whitegrid')
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Loss Curves')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+
+# Plot the training and validation accuracy curves
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Training and Validation Accuracy Curves')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
 
 
+model.save('tic_tac_toe_model.h5')
 
 
 

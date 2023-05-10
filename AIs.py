@@ -1,5 +1,7 @@
 from random import randint,choice as rand
 from time import sleep
+from keras.models import load_model
+import numpy as np
 WINS=[(1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7)]
 
             
@@ -80,5 +82,43 @@ class HorseAI(object):
         return rand(meh_moves)
         #make a good move
 
-
-
+class NNAI(DummAI):
+    def __init__(self, game_dict,mark):
+        self.gamedict = game_dict
+        self.mark = mark
+        self.model = load_model('E:\Desktop\Ferramentas\GITs\TICTACTOE\\tic_tac_toe_model.h5') #improve this call
+        self.move = self.think()
+    
+    
+    def board_to_bin(self):
+        bin_board = []
+        for mark in self.gamedict.values():
+            if mark == self.mark:
+                space = (1,0)
+            elif mark != ' ':
+                space = (0,1)
+            else:
+                space = (0,0)
+            bin_board.append(space)
+        bin_board = np.array(bin_board).flatten()
+        return bin_board.reshape(1, -1)
+    
+    
+    def prob_to_move(self,prob_move):
+        while True:
+            try:
+                move=int(np.argmax(prob_move)+1) #error here!!!
+                assert self.gamedict[move] == ' '
+                return move
+            except AssertionError:
+                np.delete(prob_move,move-1)
+                print("\nthinkin' hard...")
+        
+                
+    def think(self):
+        if 'X' not in self.gamedict.values() and 'O' not in self.gamedict.values():
+            return randint(1,9)
+        bin_board = self.board_to_bin()
+        prob_move = self.model.predict(bin_board)
+        return self.prob_to_move(prob_move)
+        

@@ -1,6 +1,6 @@
 from random import randint ,choice as rand
 from time import sleep 
-from AIs import DummAI, HorseAI
+from AIs import DummAI, HorseAI, NNAI
 
 WINS=[(1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9), (1, 5, 9), (3, 5, 7)]
 
@@ -51,7 +51,7 @@ class TicTacToe (object):
         self.play('X')
 
     def get_ai_move(self):
-        ai=HorseAI(self.gamedict,'O')
+        ai=NNAI(self.gamedict,'O')
         return ai.move
     
     def detect_win(self):
@@ -98,7 +98,7 @@ class Rand_TicTacToe(TicTacToe):
         return ai2.move
     
     def get_ai_move(self):
-        ai = HorseAI(self.gamedict,'O')
+        ai = NNAI(self.gamedict,'O')
         return ai.move
     
     def ai_move(self):
