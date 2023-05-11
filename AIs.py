@@ -83,10 +83,10 @@ class HorseAI(object):
         #make a good move
 
 class NNAI(DummAI):
+    model = load_model('E:\Desktop\Ferramentas\GITs\TICTACTOE\\tic_tac_toe_modelg22.h5')
     def __init__(self, game_dict,mark):
         self.gamedict = game_dict
         self.mark = mark
-        self.model = load_model('E:\Desktop\Ferramentas\GITs\TICTACTOE\\tic_tac_toe_model.h5') #improve this call
         self.move = self.think()
     
     
@@ -107,11 +107,11 @@ class NNAI(DummAI):
     def prob_to_move(self,prob_move):
         while True:
             try:
-                move=int(np.argmax(prob_move)+1) #error here!!!
+                move=int(np.argmax(prob_move)+1)
                 assert self.gamedict[move] == ' '
                 return move
             except AssertionError:
-                np.delete(prob_move,move-1)
+                prob_move = np.delete(prob_move,(move-1))
                 print("\nthinkin' hard...")
         
                 
@@ -119,6 +119,7 @@ class NNAI(DummAI):
         if 'X' not in self.gamedict.values() and 'O' not in self.gamedict.values():
             return randint(1,9)
         bin_board = self.board_to_bin()
-        prob_move = self.model.predict(bin_board)
+        prob_move = self.model(bin_board)
+#        prob_move = self.model(bin_board,verbose=0)
         return self.prob_to_move(prob_move)
         

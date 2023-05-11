@@ -88,7 +88,7 @@ class Rand_TicTacToe(TicTacToe):
 
     def x_move(self):
         move = self.get_x_move()
-        if 'X' in self.gamedict.values() and 'O' in self.gamedict.values():
+        if 'X' in self.gamedict.values():
             self.register_log(move,'X')
         self.make_move('X',move) 
         self.play('O')
@@ -103,16 +103,12 @@ class Rand_TicTacToe(TicTacToe):
     
     def ai_move(self):
         move = self.get_ai_move()
-        if 'X' in self.gamedict.values() and 'O' in self.gamedict.values():
+        if 'X' in self.gamedict.values():
             self.register_log(move,'O')
         self.make_move('O',move)
         self.play('X')
 
-    # def start(self):
-    #     cointoss = randint(0,1)
-    #     if cointoss:
-    #         self.play('X')
-    #     self.play('O')
+
     def register_log(self,move,turn):
         tuple_state = []
         for mark in self.gamedict.values():
@@ -144,6 +140,15 @@ class Rand_TicTacToe(TicTacToe):
             self.x_move()
         else:
             self.ai_move()
+class Clash_Of_AIs(Rand_TicTacToe):
+    
+    def get_x_move(self):
+        ai2 = DummAI(self.gamedict)
+        return ai2.move
+    
+    def get_ai_move(self):
+        ai = NNAI(self.gamedict,'O')
+        return ai.move
             
 while __name__=='__main__':
    try:

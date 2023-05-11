@@ -5,8 +5,18 @@ from keras.models import Sequential
 from keras.layers import Dense
 import matplotlib.pyplot as plt
 import seaborn as sns
+from os.path import getsize
 
-ds_path = 'ttt_ds.pkl'
+
+
+try: 
+    model_path = 'tic_tac_toe_modelg22.h5'
+    assert getsize(model_path) < 13, "\nWHOA! It seems you've already trained the model!\nContinuing will overwrite it\n\n ABORTING!\n"
+except AssertionError as e:
+    print (e)
+    exit()
+ds_path = 'tttg22_ds.pkl'
+
 with open (ds_path, mode='br') as f:
     ds = pickle.load(f)
 
@@ -24,9 +34,9 @@ for log in ds:
 
 xdata = np.array(xdata)
 ydata = np.array(ydata)
-vsize = .2
+vsize = .15
 x_train, x_val, y_train, y_val = train_test_split(xdata, ydata,train_size=(1-vsize), test_size=vsize, random_state=42)
-history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=9)
+history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=8, batch_size=15)
 
 # Plot the training and validation loss curves
 sns.set_style('whitegrid')
@@ -48,7 +58,7 @@ plt.legend()
 plt.show()
 
 
-model.save('tic_tac_toe_model.h5')
+model.save(model_path)
 
 
 
