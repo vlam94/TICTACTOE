@@ -83,7 +83,7 @@ class HorseAI(object):
         #make a good move
 
 class NNAI(DummAI):
-    model = load_model('E:\Desktop\Ferramentas\GITs\TICTACTOE\\tic_tac_toe_modelg22.h5')
+    model = load_model('E:\Desktop\Ferramentas\GITs\TICTACTOE\\tic_tac_toe_model.h5')
     def __init__(self, game_dict,mark):
         self.gamedict = game_dict
         self.mark = mark
